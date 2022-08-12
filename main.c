@@ -3,10 +3,49 @@
 #include <stdbool.h>
 #include "tire.h"
 #include "snowtire.h"
+#include "object.h"
+
+void basicObjectTest();
+void basicClassTest();
+void InheritanceTest();
+
+
+int main()
+{
+	printf("\n====== Basic Object Test ======\n");
+	basicObjectTest();
+	printf("\n====== Basic Class Test ======\n");
+	basicClassTest();
+	printf("\n====== Inheritance Test ======\n");
+	InheritanceTest();
+}
+
+void basicObjectTest()
+{
+	Object *a = object_constructor();
+	printf("object A address : %#x\n", a->address(a));
+
+	Object *b = object_constructor();
+	printf("object B address : %#x\n", b->address(b));
+
+	printf("A == B : %s\n", a->equals(a, b) ? "true" : "false");
+
+	Object *c = b;
+	printf("object C address : %#x\n", c->address(c));	
+	b = c;
+
+	printf("B == C : %s\n", b->equals(b, c) ? "true" : "false");
+
+	object_delete(a);
+	object_delete(b);
+}
 
 void basicClassTest()
 {
 	Tire *tire = tire_constructor(10, "금호타이어");
+
+	printf("<Object Instance>\n");
+	printf("object tire address : %#x\n", ((Object*)tire)->address((Object*)tire));
 
 	printf("<Tire Instance>\n");
 	printf("tire->radius = %d\n", tire->radius);
@@ -21,7 +60,7 @@ void basicClassTest()
 
 	printf("tire->rolling = %s\n", tire->rolling ? "true" : "false");
 
-	free(tire);
+	tire_delete(tire);
 }
 
 void InheritanceTest()
@@ -35,13 +74,6 @@ void InheritanceTest()
 
 	((Tire*)snowtire)->stop((Tire*)snowtire);
 	printf("snowtire->rolling = %s\n", ((Tire*)snowtire)->rolling ? "true" : "false");	
-}
 
-
-int main()
-{
-	printf("====== Basic Class Test ======\n");
-	basicClassTest();
-	printf("====== Inheritance Test ======\n");
-	InheritanceTest();	
+	tire_delete(tire);
 }

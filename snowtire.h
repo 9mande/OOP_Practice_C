@@ -11,24 +11,32 @@ struct _Snowtire{
 	unsigned int chains;
 };
 
+Snowtire* snowtire_constructor(unsigned int radius, char* company, unsigned chains);
+void snowtire_init(Snowtire *snowtire, unsigned int radius, char* company, unsigned chains);
+void snowtire_delete(Snowtire *snowtire);
 
 Snowtire* snowtire_constructor(unsigned int radius, char* company, unsigned chains)
 {
-	Snowtire *snowtire = malloc(sizeof(Snowtire));
+	Snowtire *snowtire = (Snowtire*)malloc(sizeof(Snowtire));
 
-	Tire *tire = (Tire*) snowtire; // Super Class로 바꿔서 속성 물려받기
-	tire->radius = radius;
-	tire->company = company;
-	tire->rolling = false;
-
-	tire->roll = tire_roll; // 오버라이딩은 이 함수를 변경하면 될 것 같다.
-	tire->stop = tire_stop;
-
-	snowtire->chains = 5;   // 확장
+	snowtire_init(snowtire, radius, company, chains);
 
 	return snowtire;
 }
 
+void snowtire_init(Snowtire *snowtire, unsigned int radius, char* company, unsigned chains)
+{
+	Tire *tire = (Tire*) snowtire;						// Super Class로 바꿔서 속성 물려받기
+	
+	tire_init(tire, radius, company);					// Super init
+
+	snowtire->chains = 5;								// 확장
+}
+
+void snowtire_delete(Snowtire *snowtire)
+{
+	free(snowtire);
+}
 
 
 #endif
